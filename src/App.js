@@ -9,7 +9,6 @@ import ShoppingCart from './components/ShoppingCart';
 
 // Context
 import { ProductContext } from "./contexts/ProductContext";
-
 import { CartContext } from "./contexts/CartContext";
 
 function App() {
@@ -18,7 +17,13 @@ function App() {
 
 	const addItem = item => {
 		// add the given item to the cart
-		setCart([...cart, item])
+		setCart([ item, ...cart ])
+	};
+
+	const removeItem = id => {
+		// add the given item to the cart
+		setCart(cart.filter(item => item.id !== id));
+		console.log(`removeItem fired`)
 	};
 
 	
@@ -26,16 +31,13 @@ function App() {
 	return (
 		<div className="App">
 			<ProductContext.Provider value={{products, addItem}}>
-				<CartContext.Provider value={cart}>
+				<CartContext.Provider value={{cart, removeItem}}>
 					<Navigation cart={cart} />
 
 					{/* Routes */}
 						<Route exact path="/" component={Products} />
-
-						<Route
-							path="/cart"
-							render={() => <ShoppingCart cart={cart} />}
-						/>
+						<Route exact path="/cart" component={ShoppingCart}/>
+					
 
 					</CartContext.Provider>
 			</ProductContext.Provider>
